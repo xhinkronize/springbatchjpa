@@ -1,5 +1,6 @@
 package com.xhinkronize.springbatchjpa.configuration
 
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.batch.core.Job
@@ -11,7 +12,6 @@ import org.springframework.batch.repeat.RepeatStatus
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
-import java.lang.IllegalArgumentException
 
 @Configuration
 class SimpleJobConfiguration(
@@ -20,6 +20,7 @@ class SimpleJobConfiguration(
 ) {
 
     val LOGGER:Logger = LoggerFactory.getLogger(SimpleJobConfiguration::class.java)
+
     @Bean
     fun simpleJob(): Job {
         return jobBuilderFactory.get("simpleJob")
@@ -47,7 +48,9 @@ class SimpleJobConfiguration(
     fun simpleStep1(@Value("#{jobParameters[requestDate]}") requestDate: String?): Step {
         return stepBuilderFactory.get("simpleStep1")
                 .tasklet({ contribution, chunkContext ->
-                    throw IllegalArgumentException("Fail in Step1")
+                    LOGGER.info(">>>>>>> This is Step1")
+                    LOGGER.info(">>>>>>> requestDate = {}", requestDate)
+                    return@tasklet RepeatStatus.FINISHED
                 })
                 .build()
     }
