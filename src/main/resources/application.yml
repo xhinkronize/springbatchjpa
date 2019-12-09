@@ -2,6 +2,8 @@ spring:
   profiles:
     active: dev
 
+# job.name이 넘어오면 해당 값이 일치하는 job만 실행
+# java -jar batch-application.jar --job.name=simpleJob
 spring.batch.job.names: ${job.name:NONE}
 
 ---

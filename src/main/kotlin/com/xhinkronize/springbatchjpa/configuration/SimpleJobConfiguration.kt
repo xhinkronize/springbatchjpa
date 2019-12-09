@@ -1,6 +1,7 @@
 package com.xhinkronize.springbatchjpa.configuration
 
 
+import com.xhinkronize.springbatchjpa.SimpleJobTasklet
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.batch.core.Job
@@ -16,15 +17,26 @@ import org.springframework.context.annotation.Configuration
 @Configuration
 class SimpleJobConfiguration(
         val jobBuilderFactory: JobBuilderFactory,
-        val stepBuilderFactory: StepBuilderFactory
+        val stepBuilderFactory: StepBuilderFactory,
+        var simpleJobTasklet: SimpleJobTasklet
 ) {
 
     val LOGGER:Logger = LoggerFactory.getLogger(SimpleJobConfiguration::class.java)
 
+    /*
     @Bean
     fun simpleJob(): Job {
         return jobBuilderFactory.get("simpleJob")
                 .start(simpleStep1(null))
+                .next(simpleStep2(null))
+                .build()
+    }
+     */
+
+    @Bean
+    fun simpleJob(): Job {
+        return jobBuilderFactory.get("simpleJob")
+                .start(simpleStep1())
                 .next(simpleStep2(null))
                 .build()
     }
@@ -43,6 +55,7 @@ class SimpleJobConfiguration(
     }
      */
 
+    /*
     @Bean
     @JobScope
     fun simpleStep1(@Value("#{jobParameters[requestDate]}") requestDate: String?): Step {
@@ -52,6 +65,14 @@ class SimpleJobConfiguration(
                     LOGGER.info(">>>>>>> requestDate = {}", requestDate)
                     return@tasklet RepeatStatus.FINISHED
                 })
+                .build()
+    }
+     */
+
+    fun simpleStep1(): Step {
+        LOGGER.info(">>>> definition simpleStep1")
+        return stepBuilderFactory.get("simpleStep1")
+                .tasklet(simpleJobTasklet)
                 .build()
     }
 

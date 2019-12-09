@@ -20,7 +20,7 @@ class StepNextJobConfiguration (
 
     @Bean
     fun stepNextJob() : Job {
-        return jobBuilderFactory.get("StepNextJob")
+        return jobBuilderFactory.get("stepNextJob")
                 .start(step1())
                 .next(step2())
                 .next(step3())
